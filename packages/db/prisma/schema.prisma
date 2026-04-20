@@ -1,0 +1,214 @@
+// CalAI Prisma schema
+// Run: bun db:generate  (creates Prisma Client)
+// Run: bun db:push      (sync schema to DB in dev)
+// Run: bun db:migrate   (create migrations)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// Application user. Created on first Google OAuth login.
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  name          String?
+  image         String?
+  googleId      String?  @unique
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Goals / personalization (Phase 4)
+  dailyCalorieGoal Int? @default(2000)
+  dailyProteinGoal Int? @default(120)
+  dailyCarbsGoal   Int? @default(250)
+  dailyFatGoal     Int? @default(70)
+
+  // Adaptive goals (Phase 4 / Feature 7)
+  goalType         GoalType @default(MAINTAIN)
+  targetWeightKg   Float?
+  currentWeightKg  Float?
+  heightCm         Float?
+  birthYear        Int?
+  sex              Sex?
+  activityLevel    ActivityLevel @default(MODERATE)
+  goalsLastAdjusted DateTime?
+
+  meals        Meal[]
+  entries      MealEntry[]
+  mealPatterns UserMealPattern[]
+  weightLogs   WeightLog[]
+}
+
+/// A single logged meal. One meal can contain multiple food entries (items).
+model Meal {
+  id        String     @id @default(cuid())
+  userId    String
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  mealType  MealType   @default(SNACK)
+  source    MealSource @default(TEXT)
+  notes     String?
+  imageUrl  String?
+  /// Denormalized totals for fast dashboard queries
+  totalCalories Float @default(0)
+  totalProtein  Float @default(0)
+  totalCarbs    Float @default(0)
+  totalFat      Float @default(0)
+
+  consumedAt DateTime @default(now())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  entries MealEntry[]
+
+  @@index([userId, consumedAt])
+}
+
+/// Individual food item within a meal.
+model MealEntry {
+  id        String @id @default(cuid())
+  mealId    String
+  meal      Meal   @relation(fields: [mealId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  name       String
+  quantity   Float   @default(1)
+  unit       String  @default("serving")
+
+  calories Float
+  protein  Float @default(0)
+  carbs    Float @default(0)
+  fat      Float @default(0)
+
+  /// AI confidence (0-1) if this came from vision/LLM
+  aiConfidence Float?
+  /// Whether the user manually edited AI output
+  userEdited   Boolean @default(false)
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([mealId])
+}
+
+/// Reference foods for lookup / fallback nutrition DB.
+model FoodReference {
+  id       String @id @default(cuid())
+  name     String @unique
+  aliases  String[]
+  caloriesPer100g Float
+  proteinPer100g  Float @default(0)
+  carbsPer100g    Float @default(0)
+  fatPer100g      Float @default(0)
+  defaultServingGrams Float @default(100)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum MealType {
+  BREAKFAST
+  LUNCH
+  DINNER
+  SNACK
+}
+
+enum MealSource {
+  TEXT
+  IMAGE
+  BARCODE
+  MANUAL
+  VOICE
+  SUGGESTION
+}
+
+enum GoalType {
+  LOSE
+  MAINTAIN
+  GAIN
+}
+
+enum Sex {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum ActivityLevel {
+  SEDENTARY
+  LIGHT
+  MODERATE
+  ACTIVE
+  ATHLETE
+}
+
+enum TimeOfDay {
+  MORNING   // 04:00 – 10:59
+  MIDDAY    // 11:00 – 14:59
+  EVENING   // 15:00 – 20:59
+  NIGHT     // 21:00 – 03:59
+}
+
+/// Rich, per-unit food database (Feature 1: Indian Food Intelligence).
+/// Differs from FoodReference: nutrition is per *unit* (plate/katori/piece),
+/// not per-100g, because Indian foods are culturally measured in portions.
+model FoodItem {
+  id              String   @id @default(cuid())
+  name            String   @unique
+  aliases         String[]
+  region          String?  // "South Indian", "North Indian", "Bengali", "Global", etc.
+  cuisine         String?  // optional tag (e.g. "Indian", "Chinese")
+  unitType        String   // plate | katori | piece | glass | cup | bowl | slice
+  caloriesPerUnit Float
+  protein         Float    @default(0)
+  carbs           Float    @default(0)
+  fat             Float    @default(0)
+  isVeg           Boolean  @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([region])
+  @@index([cuisine])
+}
+
+/// Smart meal memory (Feature 3). Keyed by (userId, signature) so the
+/// same combination of foods aggregates into a single pattern row with a
+/// rising `frequency`.
+model UserMealPattern {
+  id         String    @id @default(cuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  /// Deterministic hash of sorted normalized food names (e.g. "dosa|tea").
+  signature  String
+
+  /// Full structured entries so we can "relog previous meal" with one tap.
+  mealData   Json
+
+  frequency  Int       @default(1)
+  timeOfDay  TimeOfDay @default(MIDDAY)
+  lastUsedAt DateTime  @default(now())
+  createdAt  DateTime  @default(now())
+
+  @@unique([userId, signature, timeOfDay])
+  @@index([userId, timeOfDay])
+  @@index([userId, frequency])
+}
+
+/// Weight tracking for adaptive goals (Feature 7).
+model WeightLog {
+  id       String   @id @default(cuid())
+  userId   String
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  weightKg Float
+  note     String?
+  loggedAt DateTime @default(now())
+
+  @@index([userId, loggedAt])
+}

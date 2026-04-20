@@ -1,0 +1,31 @@
+{
+  "name": "@calai/db",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "generate": "prisma generate",
+    "push": "prisma db push",
+    "migrate": "prisma migrate dev",
+    "migrate:deploy": "prisma migrate deploy",
+    "studio": "prisma studio",
+    "seed": "bun run prisma/seed.ts",
+    "clean": "rm -rf node_modules .turbo"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.22.0"
+  },
+  "devDependencies": {
+    "prisma": "^5.22.0",
+    "@calai/config": "workspace:*",
+    "typescript": "^5.6.3"
+  },
+  "prisma": {
+    "seed": "bun run prisma/seed.ts"
+  }
+}
