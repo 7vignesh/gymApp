@@ -1,0 +1,33 @@
+{
+  "name": "calai-clone",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AI-powered calorie tracking app (CalAI-inspired) — Turborepo + Bun monorepo",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "typecheck": "turbo run typecheck",
+    "clean": "turbo run clean && rm -rf node_modules",
+    "db:generate": "bun --filter @calai/db run generate",
+    "db:push": "bun --filter @calai/db run push",
+    "db:migrate": "bun --filter @calai/db run migrate",
+    "db:studio": "bun --filter @calai/db run studio",
+    "db:seed": "bun --filter @calai/db run seed"
+  },
+  "devDependencies": {
+    "turbo": "^2.3.3",
+    "typescript": "^5.6.3",
+    "@types/bun": "^1.1.14",
+    "prettier": "^3.3.3"
+  },
+  "packageManager": "bun@1.3.0",
+  "engines": {
+    "bun": ">=1.1.0"
+  }
+}

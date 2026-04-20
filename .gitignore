@@ -1,0 +1,31 @@
+# deps
+node_modules
+.pnp
+.pnp.js
+
+# build
+dist
+build
+.next
+out
+.turbo
+
+# env
+.env
+.env.local
+.env.*.local
+
+# db
+*.db
+*.sqlite
+
+# misc
+.DS_Store
+*.log
+.vscode
+.idea
+coverage
+*.tsbuildinfo
+
+# bun
+bun.lockb
