@@ -54,3 +54,41 @@ userRoutes.post("/goals/adapt", async (c) => {
   const adaptation = await applyAdaptiveGoals(userId);
   return c.json(adaptation);
 });
+
+/** Muscle-group preferences (Personalized Exercise Library onboarding). */
+const MUSCLE_GROUPS = [
+  "biceps",
+  "triceps",
+  "back",
+  "chest",
+  "shoulders",
+  "legs",
+  "core",
+  "forearms",
+  "full body",
+] as const;
+
+const MusclePrefSchema = z.object({
+  muscleGroups: z.array(z.enum(MUSCLE_GROUPS)).max(MUSCLE_GROUPS.length),
+});
+
+userRoutes.get("/muscle-preferences", async (c) => {
+  const userId = c.get("userId");
+  const pref = await prisma.userMusclePreference.findUnique({ where: { userId } });
+  return c.json({ preference: pref });
+});
+
+userRoutes.put(
+  "/muscle-preferences",
+  zValidator("json", MusclePrefSchema),
+  async (c) => {
+    const userId = c.get("userId");
+    const { muscleGroups } = c.req.valid("json");
+    const pref = await prisma.userMusclePreference.upsert({
+      where: { userId },
+      create: { userId, muscleGroups },
+      update: { muscleGroups },
+    });
+    return c.json({ preference: pref });
+  },
+);

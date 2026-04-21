@@ -15,6 +15,8 @@ import { analyticsRoutes } from "./routes/analytics.routes";
 import { foodsRoutes } from "./routes/foods.routes";
 import { mealPatternsRoutes } from "./routes/meal-patterns.routes";
 import { weightRoutes } from "./routes/weight.routes";
+import { exercisesRoutes } from "./routes/exercises.routes";
+import { workoutsRoutes } from "./routes/workouts.routes";
 import { errorHandler } from "./middleware/error";
 
 const app = new Hono();
@@ -41,6 +43,8 @@ app.route("/foods", foodsRoutes);
 app.route("/ai", aiRoutes);
 app.route("/analytics", analyticsRoutes);
 app.route("/weight", weightRoutes);
+app.route("/exercises", exercisesRoutes);
+app.route("/workouts", workoutsRoutes);
 
 app.onError(errorHandler);
 app.notFound((c) => c.json({ error: "not_found" }, 404));
