@@ -1,16 +1,21 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { AppShell } from "@/components/app-shell";
 
 export const metadata: Metadata = {
-  title: "CalAI — AI calorie tracker",
+  title: "calorieX — AI calorie tracker",
   description: "Track calories effortlessly with AI.",
+};
+
+export const viewport: Viewport = {
+  themeColor: "#07080c",
+  colorScheme: "dark",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body className="min-h-screen bg-zinc-50 font-sans text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-50">
+    <html lang="en" className="dark">
+      <body className="min-h-screen font-sans text-zinc-50 antialiased">
         <AppShell>{children}</AppShell>
       </body>
     </html>

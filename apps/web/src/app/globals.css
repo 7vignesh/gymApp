@@ -2,19 +2,159 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ---------- design tokens ---------- */
 :root {
-  --bg: #fafafa;
-  --fg: #0a0a0a;
+  color-scheme: dark;
+  --bg: #07080c;
+  --bg-elev: #0d0f16;
+  --surface: rgba(255, 255, 255, 0.03);
+  --surface-hover: rgba(255, 255, 255, 0.06);
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.14);
+  --fg: #f5f7fb;
+  --fg-muted: #9aa3b2;
+  --brand-from: #10b981;
+  --brand-to: #06b6d4;
+  --accent: #a78bfa;
+  --danger: #f43f5e;
+  --ring: rgba(16, 185, 129, 0.45);
 }
 
-html, body {
+html,
+body {
   height: 100%;
   background: var(--bg);
   color: var(--fg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "ss01", "cv11";
 }
 
-@media (prefers-color-scheme: dark) {
-  :root { --bg: #09090b; --fg: #fafafa; }
+/* animated ambient background — subtle mesh gradient blobs */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(60rem 40rem at 10% -10%, rgba(16, 185, 129, 0.18), transparent 60%),
+    radial-gradient(50rem 35rem at 110% 10%, rgba(6, 182, 212, 0.15), transparent 60%),
+    radial-gradient(45rem 30rem at 50% 120%, rgba(167, 139, 250, 0.12), transparent 60%);
+  animation: bg-float 20s ease-in-out infinite alternate;
+}
+
+@keyframes bg-float {
+  0%   { transform: translate3d(0, 0, 0) scale(1); }
+  50%  { transform: translate3d(-2%, 1%, 0) scale(1.05); }
+  100% { transform: translate3d(2%, -2%, 0) scale(1); }
+}
+
+/* ---------- scrollbar ---------- */
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+*::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.15); background-clip: padding-box; }
+
+/* ---------- selection ---------- */
+::selection { background: rgba(16, 185, 129, 0.35); color: #fff; }
+
+/* ---------- reusable primitives ---------- */
+@layer components {
+  .glass {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.015));
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    border: 1px solid var(--border);
+  }
+  .glass-strong {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    border: 1px solid var(--border-strong);
+  }
+  .brand-gradient {
+    background-image: linear-gradient(135deg, var(--brand-from) 0%, var(--brand-to) 100%);
+  }
+  .brand-text {
+    background-image: linear-gradient(135deg, var(--brand-from) 0%, var(--brand-to) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .card-hover {
+    transition: transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+  }
+  .card-hover:hover {
+    transform: translateY(-2px);
+    border-color: var(--border-strong);
+    box-shadow:
+      0 10px 30px -10px rgba(0, 0, 0, 0.6),
+      0 0 0 1px rgba(255, 255, 255, 0.02) inset;
+  }
+  .ring-glow {
+    box-shadow:
+      0 0 0 1px rgba(16, 185, 129, 0.35),
+      0 12px 40px -8px rgba(16, 185, 129, 0.45);
+  }
+}
+
+/* ---------- keyframes ---------- */
+@keyframes fade-in        { from { opacity: 0 } to { opacity: 1 } }
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(12px) }
+  to   { opacity: 1; transform: translateY(0) }
+}
+@keyframes fade-down {
+  from { opacity: 0; transform: translateY(-8px) }
+  to   { opacity: 1; transform: translateY(0) }
+}
+@keyframes scale-in       { from { opacity: 0; transform: scale(0.96) } to { opacity: 1; transform: scale(1) } }
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.45) }
+  50%      { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0) }
+}
+@keyframes shimmer {
+  0%   { background-position: -200% 0 }
+  100% { background-position: 200% 0 }
+}
+@keyframes ring-draw      { from { stroke-dashoffset: 999 } to { stroke-dashoffset: var(--ring-offset, 0) } }
+@keyframes float-y {
+  0%, 100% { transform: translateY(0) }
+  50%      { transform: translateY(-6px) }
+}
+
+.animate-fade-in    { animation: fade-in 0.35s ease-out both; }
+.animate-fade-up    { animation: fade-up 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.animate-fade-down  { animation: fade-down 0.35s ease-out both; }
+.animate-scale-in   { animation: scale-in 0.3s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.animate-pulse-glow { animation: pulse-glow 2s ease-out infinite; }
+.animate-float-y    { animation: float-y 4s ease-in-out infinite; }
+
+/* stagger helpers — apply to parent to animate children */
+.stagger > * { opacity: 0; animation: fade-up 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.stagger > *:nth-child(1) { animation-delay: 0.04s }
+.stagger > *:nth-child(2) { animation-delay: 0.10s }
+.stagger > *:nth-child(3) { animation-delay: 0.16s }
+.stagger > *:nth-child(4) { animation-delay: 0.22s }
+.stagger > *:nth-child(5) { animation-delay: 0.28s }
+.stagger > *:nth-child(6) { animation-delay: 0.34s }
+.stagger > *:nth-child(7) { animation-delay: 0.40s }
+.stagger > *:nth-child(8) { animation-delay: 0.46s }
+.stagger > *:nth-child(n+9) { animation-delay: 0.5s }
+
+/* reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
 }
