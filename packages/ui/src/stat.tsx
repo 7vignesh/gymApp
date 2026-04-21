@@ -11,8 +11,8 @@ export interface StatProps {
 
 export const Stat: React.FC<StatProps> = ({ label, value, unit, hint, className }) => (
   <div className={cn("flex flex-col gap-1", className)}>
-    <span className="text-xs font-medium uppercase tracking-wide text-zinc-500">{label}</span>
-    <span className="text-2xl font-semibold text-zinc-900 dark:text-white">
+    <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-zinc-500">{label}</span>
+    <span className="text-2xl font-semibold tabular-nums text-zinc-50">
       {value}
       {unit && <span className="ml-1 text-sm font-normal text-zinc-500">{unit}</span>}
     </span>

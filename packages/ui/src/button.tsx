@@ -11,15 +11,26 @@ export interface ButtonProps
   loading?: boolean;
 }
 
+const base =
+  "relative inline-flex items-center justify-center gap-2 font-medium select-none " +
+  "transition-all duration-200 ease-out " +
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/60 focus-visible:ring-offset-0 " +
+  "active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-60 disabled:active:scale-100 " +
+  "overflow-hidden";
+
 const variantStyles: Record<Variant, string> = {
   primary:
-    "bg-emerald-500 text-white hover:bg-emerald-600 active:bg-emerald-700 disabled:bg-emerald-300",
+    "text-white bg-[linear-gradient(135deg,#10b981_0%,#06b6d4_100%)] " +
+    "shadow-[0_8px_24px_-8px_rgba(16,185,129,0.6)] hover:shadow-[0_14px_36px_-10px_rgba(16,185,129,0.75)] " +
+    "hover:brightness-110",
   secondary:
-    "bg-zinc-100 text-zinc-900 hover:bg-zinc-200 active:bg-zinc-300 disabled:opacity-60",
+    "text-zinc-100 bg-white/5 border border-white/10 backdrop-blur " +
+    "hover:bg-white/10 hover:border-white/20",
   ghost:
-    "bg-transparent text-zinc-700 hover:bg-zinc-100 active:bg-zinc-200",
+    "text-zinc-300 bg-transparent hover:bg-white/5 hover:text-white",
   danger:
-    "bg-red-500 text-white hover:bg-red-600 active:bg-red-700 disabled:bg-red-300",
+    "text-white bg-[linear-gradient(135deg,#f43f5e_0%,#f97316_100%)] " +
+    "shadow-[0_8px_24px_-8px_rgba(244,63,94,0.6)] hover:brightness-110",
 };
 
 const sizeStyles: Record<Size, string> = {
@@ -33,19 +44,23 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     <button
       ref={ref}
       disabled={disabled || loading}
-      className={cn(
-        "inline-flex items-center justify-center gap-2 font-medium transition-colors",
-        "focus:outline-none focus:ring-2 focus:ring-emerald-500/40 disabled:cursor-not-allowed",
-        variantStyles[variant],
-        sizeStyles[size],
-        className,
-      )}
+      className={cn(base, variantStyles[variant], sizeStyles[size], className)}
       {...props}
     >
+      {variant === "primary" && (
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 hover:opacity-100"
+          style={{
+            background:
+              "linear-gradient(110deg, transparent 40%, rgba(255,255,255,0.18) 50%, transparent 60%)",
+          }}
+        />
+      )}
       {loading && (
         <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
       )}
-      {children}
+      <span className="relative z-10 inline-flex items-center gap-2">{children}</span>
     </button>
   ),
 );

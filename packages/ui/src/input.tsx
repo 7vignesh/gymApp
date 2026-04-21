@@ -3,15 +3,17 @@ import { cn } from "./cn";
 
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
+  hint?: string;
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, label, id, ...props }, ref) => {
-    const inputId = id ?? React.useId();
+  ({ className, label, hint, id, ...props }, ref) => {
+    const autoId = React.useId();
+    const inputId = id ?? autoId;
     return (
       <div className="flex flex-col gap-1.5">
         {label && (
-          <label htmlFor={inputId} className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+          <label htmlFor={inputId} className="text-xs font-medium uppercase tracking-wider text-zinc-400">
             {label}
           </label>
         )}
@@ -19,13 +21,16 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           id={inputId}
           className={cn(
-            "h-11 w-full rounded-xl border border-zinc-200 bg-white px-4 text-sm outline-none",
-            "placeholder:text-zinc-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20",
-            "dark:border-zinc-700 dark:bg-zinc-900 dark:text-white",
+            "h-11 w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 text-sm text-zinc-50 outline-none",
+            "placeholder:text-zinc-500",
+            "transition-all duration-200",
+            "hover:border-white/20 hover:bg-white/[0.06]",
+            "focus:border-emerald-400/60 focus:bg-white/[0.05] focus:ring-2 focus:ring-emerald-400/25",
             className,
           )}
           {...props}
         />
+        {hint && <p className="text-xs text-zinc-500">{hint}</p>}
       </div>
     );
   },
