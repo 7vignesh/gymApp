@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import {
   Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from "recharts";
-import { Card, CardBody, CardHeader, Stat } from "@calai/ui";
+import { Card, CardBody, CardHeader, Stat } from "@caloriex/ui";
 import { api } from "@/lib/api";
 
 interface DayPoint {

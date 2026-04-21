@@ -1,8 +1,8 @@
 {
-  "name": "calai-clone",
+  "name": "caloriex",
   "version": "0.1.0",
   "private": true,
-  "description": "AI-powered calorie tracking app (CalAI-inspired) — Turborepo + Bun monorepo",
+  "description": "calorieX — AI-powered calorie tracking app (Turborepo + Bun monorepo)",
   "workspaces": [
     "apps/*",
     "packages/*"
@@ -14,11 +14,15 @@
     "test": "turbo run test",
     "typecheck": "turbo run typecheck",
     "clean": "turbo run clean && rm -rf node_modules",
-    "db:generate": "bun --filter @calai/db run generate",
-    "db:push": "bun --filter @calai/db run push",
-    "db:migrate": "bun --filter @calai/db run migrate",
-    "db:studio": "bun --filter @calai/db run studio",
-    "db:seed": "bun --filter @calai/db run seed"
+    "db:up": "docker compose up -d postgres",
+    "db:down": "docker compose down",
+    "db:reset": "docker compose down -v && docker compose up -d postgres",
+    "db:logs": "docker compose logs -f postgres",
+    "db:generate": "cd packages/db && bun run generate",
+    "db:push": "cd packages/db && bun run push",
+    "db:migrate": "cd packages/db && bun run migrate",
+    "db:studio": "cd packages/db && bun run studio",
+    "db:seed": "cd packages/db && bun run seed"
   },
   "devDependencies": {
     "turbo": "^2.3.3",

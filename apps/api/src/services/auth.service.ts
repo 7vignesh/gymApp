@@ -4,7 +4,7 @@
  */
 import { SignJWT, jwtVerify } from "jose";
 import { env } from "../env";
-import { prisma } from "@calai/db";
+import { prisma } from "@caloriex/db";
 import { AppError } from "../middleware/error";
 
 const JWT_ALG = "HS256";

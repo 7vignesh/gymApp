@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button, Card, CardBody, CardHeader, Input } from "@calai/ui";
+import { Button, Card, CardBody, CardHeader, Input } from "@caloriex/ui";
 import { api, ApiError } from "@/lib/api";
 import { compressImageToDataUrl } from "@/lib/image";
 import { useMealsStore } from "@/store/meals";

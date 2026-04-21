@@ -1,4 +1,4 @@
 {
-  "extends": "@calai/config/tsconfig/react.json",
+  "extends": "@caloriex/config/tsconfig/react.json",
   "include": ["src"]
 }

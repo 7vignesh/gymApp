@@ -7,7 +7,7 @@
 import { Hono } from "hono";
 import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
-import { prisma } from "@calai/db";
+import { prisma } from "@caloriex/db";
 import { requireAuth, type AuthContext } from "../middleware/auth";
 import { normalizeText, searchFoods } from "../services/food-normalization.service";
 import { AppError } from "../middleware/error";

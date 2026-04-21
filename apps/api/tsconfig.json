@@ -1,5 +1,5 @@
 {
-  "extends": "@calai/config/tsconfig/node.json",
+  "extends": "@caloriex/config/tsconfig/node.json",
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {

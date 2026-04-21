@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { cn } from "@calai/ui";
+import { cn } from "@caloriex/ui";
 import {
   isVoiceSupported,
   startVoiceRecognition,

@@ -17,8 +17,8 @@
  * the item is sold "per plate"), we fall back to quantity=1 and surface a
  * low-confidence flag so the UI can prompt the user to correct.
  */
-import { prisma } from "@calai/db";
-import type { FoodItem } from "@calai/db";
+import { prisma } from "@caloriex/db";
+import type { FoodItem } from "@caloriex/db";
 import { parseChunk, parseFoodText, type ParsedFood } from "./food-parser.service";
 
 export interface NormalizedFood {

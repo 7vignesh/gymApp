@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
-import { prisma, ActivityLevel, GoalType, Sex } from "@calai/db";
+import { prisma, ActivityLevel, GoalType, Sex } from "@caloriex/db";
 import { requireAuth, type AuthContext } from "../middleware/auth";
 import { applyAdaptiveGoals, computeAdaptiveGoals } from "../services/goal.service";
 

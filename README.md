@@ -22,11 +22,14 @@ bun install
 # 2. copy env and fill in values
 cp .env.example .env
 
-# 3. create DB + seed reference foods
+# 3. start local Postgres (Docker)
+bun db:up
+
+# 4. create schema + seed reference foods
 bun db:push
 bun db:seed
 
-# 4. dev — runs api (4000) + web (3000) in parallel
+# 5. dev — runs api (4000) + web (3000) in parallel
 bun dev
 ```
 
@@ -52,6 +55,10 @@ bun test              # run all tests (bun:test)
 bun typecheck         # tsc across the monorepo
 bun lint              # eslint across the monorepo
 
+bun db:up             # start local Postgres (Docker)
+bun db:down           # stop Postgres (keeps data volume)
+bun db:reset          # nuke volume + restart (destructive)
+bun db:logs           # follow Postgres logs
 bun db:generate       # prisma generate
 bun db:push           # sync schema to DB (dev)
 bun db:migrate        # create a migration

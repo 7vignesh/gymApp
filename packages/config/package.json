@@ -1,5 +1,5 @@
 {
-  "name": "@calai/config",
+  "name": "@caloriex/config",
   "version": "0.0.0",
   "private": true,
   "files": ["tsconfig", "eslint"],

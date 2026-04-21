@@ -11,8 +11,8 @@
  *
  *   - Uses the `TimeOfDay` enum; `classifyTimeOfDay` maps a Date → bucket.
  */
-import { prisma, TimeOfDay } from "@calai/db";
-import type { MealEntry, Prisma } from "@calai/db";
+import { prisma, TimeOfDay } from "@caloriex/db";
+import type { MealEntry, Prisma } from "@caloriex/db";
 
 export function classifyTimeOfDay(d: Date = new Date()): TimeOfDay {
   const h = d.getHours();

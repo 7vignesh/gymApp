@@ -8,7 +8,7 @@
 import { Hono } from "hono";
 import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
-import { prisma } from "@calai/db";
+import { prisma } from "@caloriex/db";
 import { env } from "../env";
 import {
   buildGoogleAuthUrl,

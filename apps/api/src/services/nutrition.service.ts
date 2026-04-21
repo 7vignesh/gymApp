@@ -9,7 +9,7 @@
  *
  * All macros are stored per-100g; we multiply by servingGrams / 100.
  */
-import { prisma } from "@calai/db";
+import { prisma } from "@caloriex/db";
 import type { ParsedFood } from "./food-parser.service";
 import { normalizeOne } from "./food-normalization.service";
 

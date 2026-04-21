@@ -10,7 +10,7 @@
  *
  * Idempotent: safe to call on every login / once-weekly cron.
  */
-import { prisma, type User, type WeightLog, ActivityLevel, GoalType, Sex } from "@calai/db";
+import { prisma, type User, type WeightLog, ActivityLevel, GoalType, Sex } from "@caloriex/db";
 import { addDays } from "../utils/date";
 
 const KCAL_PER_G = { protein: 4, carbs: 4, fat: 9 } as const;

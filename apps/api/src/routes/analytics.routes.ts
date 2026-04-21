@@ -5,7 +5,7 @@
 import { Hono } from "hono";
 import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
-import { prisma } from "@calai/db";
+import { prisma } from "@caloriex/db";
 import { requireAuth, type AuthContext } from "../middleware/auth";
 import { addDays, formatISODate, startOfDay, endOfDay } from "../utils/date";
 import { weeklyInsightsForUser } from "../services/insights.service";

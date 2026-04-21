@@ -6,7 +6,7 @@
 import { Hono } from "hono";
 import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
-import { prisma, MealSource, MealType, TimeOfDay } from "@calai/db";
+import { prisma, MealSource, MealType, TimeOfDay } from "@caloriex/db";
 import { requireAuth, type AuthContext } from "../middleware/auth";
 import { AppError } from "../middleware/error";
 import {

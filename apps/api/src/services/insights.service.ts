@@ -14,8 +14,8 @@
  *   - "Excess carbs at night"
  *   - "Weekly calorie average is trending above your goal"
  */
-import { prisma, TimeOfDay } from "@calai/db";
-import type { Meal, MealEntry } from "@calai/db";
+import { prisma, TimeOfDay } from "@caloriex/db";
+import type { Meal, MealEntry } from "@caloriex/db";
 import { addDays, endOfDay, startOfDay } from "../utils/date";
 import { classifyTimeOfDay } from "./meal-pattern.service";
 import { generateInsights, type DailyLogSummary, type Insight } from "./ai.service";

@@ -6,7 +6,7 @@ import { useAuthStore } from "@/store/auth";
 import { useMealsStore } from "@/store/meals";
 import { api } from "@/lib/api";
 import type { Insight } from "@/lib/types";
-import { Card, CardBody, CardHeader, Progress, Stat, Button } from "@calai/ui";
+import { Card, CardBody, CardHeader, Progress, Stat, Button } from "@caloriex/ui";
 import { useState } from "react";
 import { MealSuggestions } from "@/components/meal-suggestions";
 import { OfflineBanner } from "@/components/offline-banner";

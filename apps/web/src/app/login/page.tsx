@@ -5,7 +5,7 @@ import { API_URL } from "@/lib/env";
 import { api } from "@/lib/api";
 import { useAuthStore } from "@/store/auth";
 import type { User } from "@/lib/types";
-import { Button, Card, CardBody, CardHeader, Input } from "@calai/ui";
+import { Button, Card, CardBody, CardHeader, Input } from "@caloriex/ui";
 
 export default function LoginPage() {
   const router = useRouter();

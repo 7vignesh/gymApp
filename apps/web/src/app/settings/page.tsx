@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Button, Card, CardBody, CardHeader, Input, Stat } from "@calai/ui";
+import { Button, Card, CardBody, CardHeader, Input, Stat } from "@caloriex/ui";
 import { api } from "@/lib/api";
 import { useAuthStore } from "@/store/auth";
 import type { User } from "@/lib/types";
