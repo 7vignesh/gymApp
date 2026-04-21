@@ -38,10 +38,12 @@ model User {
   activityLevel    ActivityLevel @default(MODERATE)
   goalsLastAdjusted DateTime?
 
-  meals        Meal[]
-  entries      MealEntry[]
-  mealPatterns UserMealPattern[]
-  weightLogs   WeightLog[]
+  meals            Meal[]
+  entries          MealEntry[]
+  mealPatterns     UserMealPattern[]
+  weightLogs       WeightLog[]
+  musclePreference UserMusclePreference?
+  workouts         Workout[]
 }
 
 /// A single logged meal. One meal can contain multiple food entries (items).
@@ -199,6 +201,102 @@ model UserMealPattern {
   @@unique([userId, signature, timeOfDay])
   @@index([userId, timeOfDay])
   @@index([userId, frequency])
+}
+
+/// ============================================================
+/// Personalized Exercise Library
+/// ============================================================
+
+/// Normalized exercise record imported from free-exercise-db.
+/// Source URL is hit once by the seed script; runtime reads only from our DB.
+model Exercise {
+  id               String   @id @default(cuid())
+  slug             String   @unique
+  name             String
+  aliases          String[] @default([])
+
+  category         String   // strength | cardio | stretching | plyometrics | powerlifting | olympic weightlifting | strongman
+  level            String   // beginner | intermediate | expert (we surface "advanced" in UI)
+  force            String?  // push | pull | static
+  mechanic         String?  // compound | isolation
+
+  primaryMuscles   String[] @default([])
+  secondaryMuscles String[] @default([])
+  equipment        String[] @default([])    // normalized bucket list
+  bodyPart         String                   // biceps | triceps | back | chest | shoulders | legs | core | forearms | full body | cardio
+
+  instructions     String[] @default([])
+  tips             String[] @default([])
+  images           String[] @default([])
+  videoUrl         String?
+
+  isBodyweight     Boolean  @default(false)
+  isMachine        Boolean  @default(false)
+  isFreeWeight     Boolean  @default(false)
+  isCable          Boolean  @default(false)
+  isBands          Boolean  @default(false)
+
+  sourceName       String?  // "free-exercise-db"
+  status           String   @default("active")
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  workoutEntries   WorkoutExercise[]
+
+  @@index([bodyPart])
+  @@index([level])
+  @@index([isBodyweight])
+  @@index([isMachine])
+  @@index([isFreeWeight])
+  @@index([isCable])
+  @@index([isBands])
+}
+
+/// One row per user. Array of normalized bodyPart slugs
+/// (e.g. ["biceps", "chest", "legs"]). Absent row = "no preference yet".
+model UserMusclePreference {
+  id           String   @id @default(cuid())
+  userId       String   @unique
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  muscleGroups String[] @default([])
+  updatedAt    DateTime @updatedAt
+  createdAt    DateTime @default(now())
+}
+
+/// A workout = ordered list of exercises with set/rep/weight defaults.
+/// Minimal-but-future-proof; no pre-existing workout system in the repo.
+model Workout {
+  id        String            @id @default(cuid())
+  userId    String
+  user      User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String
+  notes     String?
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+
+  entries   WorkoutExercise[]
+
+  @@index([userId, createdAt])
+}
+
+model WorkoutExercise {
+  id          String   @id @default(cuid())
+  workoutId   String
+  workout     Workout  @relation(fields: [workoutId], references: [id], onDelete: Cascade)
+  exerciseId  String
+  exercise    Exercise @relation(fields: [exerciseId], references: [id])
+  order       Int      @default(0)
+
+  sets        Int      @default(3)
+  reps        Int      @default(10)
+  weightKg    Float?
+  restSec     Int      @default(60)
+  notes       String?
+
+  createdAt   DateTime @default(now())
+
+  @@index([workoutId, order])
 }
 
 /// Weight tracking for adaptive goals (Feature 7).
