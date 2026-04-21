@@ -85,15 +85,20 @@ export function VoiceButton({
         onClick={listening ? stop : start}
         aria-label={listening ? "Stop voice input" : "Start voice input"}
         className={cn(
-          "flex h-11 w-11 items-center justify-center rounded-full transition-all",
+          "relative flex h-11 w-11 items-center justify-center rounded-xl transition-all active:scale-95",
           listening
-            ? "bg-red-500 text-white shadow-lg shadow-red-500/40 animate-pulse"
-            : "bg-zinc-900 text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900",
+            ? "bg-[linear-gradient(135deg,#f43f5e_0%,#f97316_100%)] text-white shadow-[0_10px_30px_-8px_rgba(244,63,94,0.65)]"
+            : "border border-white/10 bg-white/[0.04] text-zinc-200 hover:border-white/20 hover:bg-white/[0.08]",
         )}
       >
-        <MicIcon />
+        {listening && (
+          <span className="absolute inset-0 animate-ping rounded-xl bg-rose-500/40" />
+        )}
+        <span className="relative">
+          <MicIcon />
+        </span>
       </button>
-      {error && <span className="text-xs text-red-500">{error}</span>}
+      {error && <span className="text-[11px] text-rose-400">{error}</span>}
     </div>
   );
 }

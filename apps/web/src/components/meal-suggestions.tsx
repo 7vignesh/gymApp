@@ -56,31 +56,33 @@ export function MealSuggestions({
   return (
     <section className="flex flex-col gap-2">
       <div className="flex items-baseline justify-between">
-        <h2 className="text-sm font-semibold text-zinc-600 dark:text-zinc-400">
-          Frequent meals · {data.timeOfDay.toLowerCase()}
+        <h2 className="text-[11px] font-semibold uppercase tracking-[0.16em] text-zinc-500">
+          Frequent · {data.timeOfDay.toLowerCase()}
         </h2>
       </div>
-      <div className="flex flex-wrap gap-2">
+      <div className="stagger flex flex-wrap gap-2">
         {data.items.map((p) => {
           const label = p.entries.map((e) => e.name).join(", ");
           const cals = Math.round(p.entries.reduce((a, e) => a + e.calories, 0));
           return (
             <div
               key={p.id}
-              className="flex items-center gap-2 rounded-full border border-zinc-200 bg-white pl-3 pr-1 py-1 text-sm shadow-sm dark:border-zinc-700 dark:bg-zinc-900"
+              className="group flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] py-1 pl-3 pr-1 text-sm backdrop-blur-xl transition-all hover:-translate-y-0.5 hover:border-white/20 hover:bg-white/[0.07]"
             >
               <button
                 onClick={() => onPick?.(p.signature, p.entries)}
-                className="max-w-[180px] truncate text-zinc-700 hover:text-emerald-600 dark:text-zinc-300"
+                className="max-w-[180px] truncate text-zinc-300 transition-colors group-hover:text-white"
                 title={label}
               >
                 {label}
               </button>
-              <span className="text-[10px] text-zinc-400">{cals} kcal · ×{p.frequency}</span>
+              <span className="tabular-nums text-[10px] text-zinc-500">
+                {cals} kcal · ×{p.frequency}
+              </span>
               <button
                 onClick={() => quickLog(p.id)}
                 disabled={loadingId === p.id}
-                className="ml-1 h-7 rounded-full bg-emerald-500 px-3 text-xs font-medium text-white hover:bg-emerald-600 disabled:opacity-60"
+                className="ml-1 h-7 rounded-full bg-brand-gradient px-3 text-xs font-medium text-white shadow-[0_4px_14px_-4px_rgba(16,185,129,0.6)] transition-transform hover:-translate-y-0.5 active:scale-95 disabled:opacity-60"
                 title="Log this meal now"
               >
                 {loadingId === p.id ? "…" : "+ Log"}

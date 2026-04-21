@@ -15,17 +15,17 @@ export function OfflineBanner() {
   if (!offline) return null;
 
   return (
-    <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-900 dark:bg-amber-950/40 dark:text-amber-100">
+    <div className="relative overflow-hidden rounded-2xl border border-amber-400/20 bg-amber-500/[0.08] px-4 py-3 text-sm text-amber-100 backdrop-blur-xl animate-fade-down">
       <div className="flex items-center gap-2">
-        <span className="flex h-2 w-2 rounded-full bg-amber-500 animate-pulse" />
-        <span className="font-medium">Offline mode active</span>
+        <span className="relative flex h-2 w-2">
+          <span className="absolute inset-0 animate-ping rounded-full bg-amber-400 opacity-75" />
+          <span className="relative h-2 w-2 rounded-full bg-amber-400" />
+        </span>
+        <span className="font-semibold">Offline mode active</span>
       </div>
-      <p className="mt-1 text-xs opacity-90">
-        {online
-          ? "Server is unreachable."
-          : "You are offline."}{" "}
-        Using local cache ({count} foods) for estimates. Entries will sync when
-        you're back online.
+      <p className="mt-1 text-xs text-amber-200/80">
+        {online ? "Server is unreachable." : "You are offline."} Using local cache
+        ({count} foods) for estimates. Entries will sync when you&apos;re back online.
       </p>
     </div>
   );
