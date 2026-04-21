@@ -106,9 +106,9 @@ export default function SettingsPage() {
   return (
     <div className="flex flex-col gap-5">
       <OfflineBanner />
-      <section>
-        <h1 className="text-2xl font-semibold tracking-tight">Settings</h1>
-        <p className="text-sm text-zinc-500">Profile, weight, and adaptive goals.</p>
+      <section className="animate-fade-up">
+        <h1 className="text-3xl font-semibold tracking-tight text-white">Settings</h1>
+        <p className="mt-1 text-sm text-zinc-400">Profile, weight, and adaptive goals.</p>
       </section>
 
       <Card>
@@ -141,37 +141,16 @@ export default function SettingsPage() {
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
             <Input label="Height (cm)" type="number" value={heightCm} onChange={(e) => setHeightCm(e.target.value)} />
             <Input label="Birth year" type="number" value={birthYear} onChange={(e) => setBirthYear(e.target.value)} />
-            <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Sex</label>
-              <select
-                value={sex}
-                onChange={(e) => setSex(e.target.value as typeof sex)}
-                className="h-11 rounded-xl border border-zinc-200 bg-white px-3 text-sm dark:border-zinc-700 dark:bg-zinc-900"
-              >
-                <option value="">—</option>
-                {SEX.map((s) => <option key={s} value={s}>{s}</option>)}
-              </select>
-            </div>
-            <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Activity</label>
-              <select
-                value={activity}
-                onChange={(e) => setActivity(e.target.value as typeof activity)}
-                className="h-11 rounded-xl border border-zinc-200 bg-white px-3 text-sm dark:border-zinc-700 dark:bg-zinc-900"
-              >
-                {ACTIVITY.map((a) => <option key={a} value={a}>{a}</option>)}
-              </select>
-            </div>
-            <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Goal</label>
-              <select
-                value={goalType}
-                onChange={(e) => setGoalType(e.target.value as typeof goalType)}
-                className="h-11 rounded-xl border border-zinc-200 bg-white px-3 text-sm dark:border-zinc-700 dark:bg-zinc-900"
-              >
-                {GOALS.map((g) => <option key={g} value={g}>{g}</option>)}
-              </select>
-            </div>
+            <SelectField label="Sex" value={sex} onChange={(v) => setSex(v as typeof sex)}>
+              <option value="">—</option>
+              {SEX.map((s) => <option key={s} value={s}>{s}</option>)}
+            </SelectField>
+            <SelectField label="Activity" value={activity} onChange={(v) => setActivity(v as typeof activity)}>
+              {ACTIVITY.map((a) => <option key={a} value={a}>{a}</option>)}
+            </SelectField>
+            <SelectField label="Goal" value={goalType} onChange={(v) => setGoalType(v as typeof goalType)}>
+              {GOALS.map((g) => <option key={g} value={g}>{g}</option>)}
+            </SelectField>
             <Input label="Target weight (kg)" type="number" step="0.1" value={targetWeight} onChange={(e) => setTargetWeight(e.target.value)} />
           </div>
           <Button className="mt-4" onClick={saveProfile} loading={busy === "profile"}>Save profile</Button>
@@ -204,7 +183,7 @@ export default function SettingsPage() {
                     hint={`${adaptation.trend.daysOfData}d of data`}
                   />
                 </div>
-                <p className="mt-3 text-sm text-zinc-600 dark:text-zinc-400">{adaptation.reason}</p>
+                <p className="mt-3 rounded-xl border border-white/[0.06] bg-white/[0.03] px-3 py-2 text-sm text-zinc-300">{adaptation.reason}</p>
                 <Button
                   className="mt-4"
                   onClick={applyAdaptive}
@@ -215,11 +194,42 @@ export default function SettingsPage() {
                 </Button>
               </>
             ) : (
-              <p className="text-sm text-zinc-600 dark:text-zinc-400">{adaptation.reason}</p>
+              <p className="text-sm text-zinc-400">{adaptation.reason}</p>
             )}
           </CardBody>
         </Card>
       )}
+    </div>
+  );
+}
+
+function SelectField({
+  label, value, onChange, children,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex flex-col gap-1.5">
+      <label className="text-xs font-medium uppercase tracking-wider text-zinc-400">
+        {label}
+      </label>
+      <div className="relative">
+        <select
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="h-11 w-full appearance-none rounded-xl border border-white/10 bg-white/[0.04] px-3 pr-9 text-sm text-zinc-50 outline-none transition-all hover:border-white/20 focus:border-emerald-400/60 focus:ring-2 focus:ring-emerald-400/25"
+        >
+          {children}
+        </select>
+        <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </span>
+      </div>
     </div>
   );
 }

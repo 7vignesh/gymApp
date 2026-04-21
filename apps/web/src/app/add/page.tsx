@@ -91,9 +91,9 @@ export default function AddFoodPage() {
   return (
     <div className="flex flex-col gap-5">
       <OfflineBanner />
-      <section>
-        <h1 className="text-2xl font-semibold tracking-tight">Add food</h1>
-        <p className="text-sm text-zinc-500">Type, speak, or pick a frequent meal.</p>
+      <section className="animate-fade-up">
+        <h1 className="text-3xl font-semibold tracking-tight text-white">Add food</h1>
+        <p className="mt-1 text-sm text-zinc-400">Type, speak, or pick a frequent meal.</p>
       </section>
 
       <MealSuggestions
@@ -116,10 +116,10 @@ export default function AddFoodPage() {
               <button
                 key={t}
                 onClick={() => setMealType(t)}
-                className={`rounded-full px-3 py-1 text-xs font-medium ${
+                className={`relative rounded-full px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-wider transition-all ${
                   mealType === t
-                    ? "bg-emerald-500 text-white"
-                    : "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300"
+                    ? "bg-brand-gradient text-white shadow-[0_6px_20px_-6px_rgba(16,185,129,0.6)]"
+                    : "border border-white/10 bg-white/[0.04] text-zinc-300 hover:border-white/20 hover:bg-white/[0.08]"
                 }`}
               >
                 {t}
@@ -134,7 +134,7 @@ export default function AddFoodPage() {
               onChange={(e) => setText(e.target.value)}
               placeholder="e.g. 2 plates biryani with masala dosa and chai"
               rows={3}
-              className="flex-1 resize-none rounded-xl border border-zinc-200 bg-white p-3 text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-zinc-700 dark:bg-zinc-900"
+              className="flex-1 resize-none rounded-xl border border-white/10 bg-white/[0.04] p-3 text-sm text-zinc-50 placeholder:text-zinc-500 outline-none transition-all hover:border-white/20 focus:border-emerald-400/60 focus:bg-white/[0.05] focus:ring-2 focus:ring-emerald-400/25"
             />
             <VoiceButton
               onInterim={(t) => setText(t)}
@@ -149,15 +149,20 @@ export default function AddFoodPage() {
               Save ({Math.round(totalCal)} kcal)
             </Button>
           </div>
-          {error && <p className="mt-2 text-xs text-red-500">{error}</p>}
+          {error && (
+            <p className="mt-2 rounded-lg border border-rose-400/20 bg-rose-500/10 px-3 py-2 text-xs text-rose-300 animate-fade-in">
+              {error}
+            </p>
+          )}
         </CardBody>
       </Card>
 
       {items.length > 0 && (
         <section className="flex flex-col gap-3">
-          <h2 className="text-sm font-semibold text-zinc-600 dark:text-zinc-400">
+          <h2 className="text-[11px] font-semibold uppercase tracking-[0.16em] text-zinc-500">
             Review & edit
           </h2>
+          <div className="stagger flex flex-col gap-3">
           {items.map((it, idx) => (
             <Card key={idx}>
               <CardBody>
@@ -170,7 +175,7 @@ export default function AddFoodPage() {
                     />
                   </div>
                   {it.confidence < 0.5 && (
-                    <span className="self-end rounded-md bg-amber-100 px-2 py-0.5 text-[10px] font-medium uppercase text-amber-700">
+                    <span className="self-end rounded-md border border-amber-400/30 bg-amber-500/[0.1] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-amber-200">
                       low confidence
                     </span>
                   )}
@@ -216,6 +221,7 @@ export default function AddFoodPage() {
               </CardBody>
             </Card>
           ))}
+          </div>
         </section>
       )}
     </div>

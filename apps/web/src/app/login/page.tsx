@@ -5,13 +5,13 @@ import { API_URL } from "@/lib/env";
 import { api } from "@/lib/api";
 import { useAuthStore } from "@/store/auth";
 import type { User } from "@/lib/types";
-import { Button, Card, CardBody, CardHeader, Input } from "@caloriex/ui";
+import { Button, Input } from "@caloriex/ui";
 
 export default function LoginPage() {
   const router = useRouter();
   const { setAuth } = useAuthStore();
   const [loading, setLoading] = useState(false);
-  const [email, setEmail] = useState("dev@calai.local");
+  const [email, setEmail] = useState("dev@caloriex.local");
   const [error, setError] = useState<string | null>(null);
 
   async function devLogin() {
@@ -32,31 +32,52 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center px-5">
-      <Card className="w-full max-w-sm">
-        <CardHeader>
-          <div className="flex items-center gap-2">
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500 text-xl text-white">
-              🥗
-            </span>
-            <div>
-              <h1 className="text-lg font-semibold">Welcome to CalAI</h1>
-              <p className="text-xs text-zinc-500">AI-powered calorie tracker</p>
-            </div>
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden px-5">
+      {/* animated orb backdrop */}
+      <Orbs />
+
+      <div className="relative z-10 w-full max-w-sm animate-scale-in">
+        {/* brand header */}
+        <div className="mb-6 flex flex-col items-center gap-3 text-center">
+          <div
+            className="relative flex h-14 w-14 items-center justify-center rounded-2xl text-white shadow-glow-brand animate-float-y"
+            style={{ backgroundImage: "linear-gradient(135deg, #10b981 0%, #06b6d4 100%)" }}
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="h-7 w-7">
+              <path d="M4 20c4-10 9-14 16-16-2 10-6 15-16 16Z" />
+              <path d="M4 20c4-4 8-6 12-8" />
+            </svg>
           </div>
-        </CardHeader>
-        <CardBody>
+          <div>
+            <h1 className="text-2xl font-semibold tracking-tight text-white">
+              Welcome to <span className="brand-text">calorieX</span>
+            </h1>
+            <p className="mt-1 text-sm text-zinc-400">
+              AI-powered calorie tracker
+            </p>
+          </div>
+        </div>
+
+        {/* auth card */}
+        <div className="glass-strong rounded-2xl p-6 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.7)]">
           <a
             href={`${API_URL}/auth/google`}
-            className="flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-white px-4 text-sm font-medium text-zinc-800 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:bg-zinc-800"
+            className="group relative flex h-11 w-full items-center justify-center gap-2.5 overflow-hidden rounded-xl border border-white/10 bg-white/[0.04] px-4 text-sm font-medium text-zinc-100 transition-all hover:border-white/20 hover:bg-white/[0.08] active:scale-[0.98]"
           >
-            <GoogleG /> Continue with Google
+            <GoogleG />
+            <span>Continue with Google</span>
+            <span
+              aria-hidden
+              className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-700 group-hover:translate-x-full"
+            />
           </a>
 
           <div className="my-5 flex items-center gap-3">
-            <div className="h-px flex-1 bg-zinc-200 dark:bg-zinc-800" />
-            <span className="text-xs uppercase text-zinc-400">or dev login</span>
-            <div className="h-px flex-1 bg-zinc-200 dark:bg-zinc-800" />
+            <div className="h-px flex-1 bg-white/10" />
+            <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-zinc-500">
+              or dev login
+            </span>
+            <div className="h-px flex-1 bg-white/10" />
           </div>
 
           <div className="flex flex-col gap-3">
@@ -69,14 +90,44 @@ export default function LoginPage() {
             <Button onClick={devLogin} loading={loading}>
               Dev sign in
             </Button>
-            {error && <p className="text-center text-xs text-red-500">{error}</p>}
-            <p className="text-center text-xs text-zinc-500">
+            {error && (
+              <p className="rounded-lg border border-rose-400/20 bg-rose-500/10 px-3 py-2 text-center text-xs text-rose-300 animate-fade-in">
+                {error}
+              </p>
+            )}
+            <p className="text-center text-[11px] text-zinc-500">
               Dev-only (disabled in production). Uses a test user for API exploration.
             </p>
           </div>
-        </CardBody>
-      </Card>
+        </div>
+
+        <p className="mt-6 text-center text-[11px] text-zinc-600">
+          By continuing you agree to our Terms &amp; Privacy Policy.
+        </p>
+      </div>
     </div>
+  );
+}
+
+function Orbs() {
+  return (
+    <>
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -left-32 top-20 h-80 w-80 rounded-full blur-3xl animate-float-y"
+        style={{ background: "radial-gradient(closest-side, rgba(16,185,129,0.35), transparent)" }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-32 bottom-10 h-96 w-96 rounded-full blur-3xl animate-float-y"
+        style={{ background: "radial-gradient(closest-side, rgba(6,182,212,0.3), transparent)", animationDelay: "1.2s" }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 top-1/3 h-64 w-64 -translate-x-1/2 rounded-full blur-3xl"
+        style={{ background: "radial-gradient(closest-side, rgba(167,139,250,0.22), transparent)" }}
+      />
+    </>
   );
 }
 
