@@ -15,6 +15,7 @@
     "migrate:deploy": "prisma migrate deploy",
     "studio": "prisma studio",
     "seed": "bun run prisma/seed.ts",
+    "seed:exercises": "bun run prisma/seed-exercises.ts",
     "clean": "rm -rf node_modules .turbo"
   },
   "dependencies": {

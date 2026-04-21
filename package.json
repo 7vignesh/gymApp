@@ -22,7 +22,8 @@
     "db:push": "cd packages/db && bun --env-file=../../.env run push",
     "db:migrate": "cd packages/db && bun --env-file=../../.env run migrate",
     "db:studio": "cd packages/db && bun --env-file=../../.env run studio",
-    "db:seed": "cd packages/db && bun --env-file=../../.env run seed"
+    "db:seed": "cd packages/db && bun --env-file=../../.env run seed",
+    "db:seed:exercises": "cd packages/db && bun --env-file=../../.env run seed:exercises"
   },
   "devDependencies": {
     "turbo": "^2.3.3",
